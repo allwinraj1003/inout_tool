@@ -1,0 +1,88 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #840ede, #071fa8); 
+  color: #fff;
+}
+
+.left-section {
+  background: transparent;
+  flex-direction: column;
+  padding: 40px;
+  position: relative;
+  color: white;
+  text-align: center;
+  justify-content: center;
+}
+
+.left-section img.logo {
+  margin-bottom: 30px;
+  max-width: 150px;
+}
+
+.left-section .icon {
+  position: absolute;
+  width: 60px;
+  opacity: 0.8;
+}
+
+.icon1 {
+  top: 40%;
+  left: 15%;
+}
+
+.icon2 {
+  top: 60%;
+  right: 20%;
+}
+
+.icon3 {
+  top: 70%;
+  left: 25%;
+}
+
+.left-section .logo {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  width: 80px;
+}
+
+.left-section .quote {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+
+.right-section {
+  background-color: #faf8f8e6; /* translucent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  height: 100vh;
+}
+
+.login-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  color: #000;
+}
+
+.login-card h4,
+.login-card h3 {
+  color: #1c67f3;
+}

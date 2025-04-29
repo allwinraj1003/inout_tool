@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  {% load static %}
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/dashboard001.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/dash.css' %}" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #840ede, #071fa8); 
+      color: #fff;
+      margin: 70px;
+      padding-top: 80px;
+    }
+  
+    /* Fixed Sidebar */
+    .fixed-sidebar {
+      position: fixed;
+      top: 70px; /* height of navbar */
+      left: 0;
+      width: 250px;
+      height: calc(100vh - 70px); /* Full height minus navbar */
+      background-color:rgb(250, 244, 244);
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    .sidebar-header h5 {
+      margin: 0;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .sidebar-header p {
+      margin: 0;
+      font-size: 14px;
+      color:rgb(10, 10, 11);
+    }
+
+    .nav-link {
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      padding: 10px;
+      border-radius: 5px;
+      color: white;
+    }
+    .ho{
+      color:black;
+    }
+
+
+    
+    .content {
+      margin-left: 250px;
+      padding: 100px 20px 20px 20px; /* top padding to avoid navbar overlap */
+    }
+
+    /* Navbar Custom */
+    .navbar {
+      background-color:rgb(0, 0, 0);
+      height: 70px;
+    }
+
+    .navbar-brand img {
+      height: 40px;
+    }
+    
+  
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid d-flex align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="{% static 'images/sbs.jpg' %}" alt="Logo" height="40"/>
+      </a>
+
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <h2 class="mb-0 me-3 d-none d-md-block" style="color: black; font-size: 20px;">
+            Welcome, {{ user.first_name }} {{ user.last_name }}
+          </h2>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <img src="https://ui-avatars.com/api/?name={{ user.first_name }}&background=0D8ABC&color=fff&rounded=true" alt="Profile" class="rounded-circle" width="40" height="40"/>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="fas fa-key"></i> Change Password</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<br>
+  <!-- Sidebar -->
+  <div id="sidebarMenu" class="fixed-sidebar">
+    <div class="sidebar-header">
+      {% comment %} <h5>{{ user.first_name }}<br><p>{{ user.role }}</p></h5> {% endcomment %}
+    </div>
+    <div class="sidebar-body">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="#"><i class="fas fa-user"></i> Profile</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'password_change' %}"><i class="fas fa-key"></i> Change Password</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container">
+    <h2 class="mb-4"style="color: black; font-size: 20px;">Attendance Records</h2>
+
+    <form method="get" action="" class="row g-3 mb-4">
+      <div class="col-md-3">
+        <input type="text" name="search" class="form-control" placeholder="Search by name" value="{{ request.GET.search }}">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="start_date" class="form-control" value="{{ request.GET.start_date }}">
+      </div>
+      <div class="col-md-3">
+        <input type="date" name="end_date" class="form-control" value="{{ request.GET.end_date }}">
+      </div>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{% url 'export_attendance_excel' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn btn-success">Download Excel</a>
+      </div>
+    </form>
+
+    <div class="table-responsive table-wrapper" style="max-height: 400px; overflow-y: auto;">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Date</th>
+            <th>Login Time</th>
+            <th>Logout Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in daily_records %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+              <td>{{ record.user.role|default:"No Role Assigned" }}</td>
+              <td>{{ record.date }}</td>
+              <td>{{ record.check_in_time|time:"H:i:s" }}</td>
+              <td>{{ record.check_out_time|default:"-"|time:"H:i:s" }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center"style="color: red; font-size: 17px;">No attendance records found for the selected criteria.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+
+  {% load static %}
+
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/dashboard001.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/dash.css' %}" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .fixed-sidebar {
+      position: fixed;
+      top: 70px; /* height of navbar */
+      left: 0;
+      width: 250px;
+      height: calc(100vh - 70px); /* Full height minus navbar */
+      background-color:rgb(250, 244, 244);
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    .sidebar-header h5 {
+      margin: 0;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .sidebar-header p {
+      margin: 0;
+      font-size: 14px;
+      color:rgb(10, 10, 11);
+    }
+
+    .nav-link {
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      padding: 10px;
+      border-radius: 5px;
+      color: white;
+    }
+    .ho{
+      color:black;
+    }
+
+
+    
+    .content {
+      margin-left: 250px;
+      padding: 100px 20px 20px 20px; /* top padding to avoid navbar overlap */
+    }
+
+    /* Navbar Custom */
+    .navbar {
+      background-color:rgb(0, 0, 0);
+      height: 70px;
+    }
+
+    .navbar-brand img {
+      height: 40px;
+    }
+    
+  
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid d-flex align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="{% static 'images/sbs.jpg' %}" alt="Logo" />
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <h2 class="mb-0 me-3 d-none d-md-block" style="color: #333; font-size: 20px;">
+            Welcome, {{ user.first_name }} {{ user.last_name }}
+          </h2>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+              <img src="https://ui-avatars.com/api/?name={{ user.first_name }}&background=0D8ABC&color=fff&rounded=true" alt="Profile" class="rounded-circle" width="40" height="40" />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'password_change' %}"><i class="fas fa-key"></i> Change Password</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% comment %}  Sidebar  {% endcomment %}
+  <div id="sidebarMenu" class="fixed-sidebar">
+    <div class="sidebar-header">
+      {% comment %} <h5>{{ user.first_name }}<br><p>{{ user.role }}</p></h5> {% endcomment %}
+    </div>
+    <div class="sidebar-body">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="#"><i class="fas fa-user"></i> Profile</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'password_change' %}"><i class="fas fa-key"></i> Change Password</a>
+        </li>
+        <li class="nav-item mb-2 ho">
+          <a class="nav-link ho" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {% comment %} Main Content {% endcomment %}
+  <div class="content">
+    <div class="container">
+      <div class="dashboard-header">Your Daily Attendance</div>
+
+      <center>
+        <form method="post"  style="max-height: 400px; overflow-y: auto;"> 
+          {% csrf_token %}
+          {% if attendance %}
+            {% if attendance.check_out_time %}
+              <p>Checked In At: {{ attendance.check_in_time }}</p>
+              <p>Checked Out At: {{ attendance.check_out_time }}</p>
+            {% else %}
+              <p>Checked In At: {{ attendance.check_in_time }}</p>
+              <button type="submit" name="check_out" value="1" class="btn btn-danger">I am Out</button>
+            {% endif %}
+          {% else %}
+            <button type="submit" name="check_in" value="1" class="btn btn-success">I am in</button>
+          {% endif %}
+        </form>
+      </center>
+
+      {% comment %} Attendance Table  {% endcomment %}
+      <div class="table-responsive mt-4"  style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Date</th>
+              <th>Login Time</th>
+              <th>Logout Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in daily_records %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+                <td>{{ record.user.role|default:"No Role Assigned" }}</td>
+                <td>{{ record.date }}</td>
+                <td>{{ record.check_in_time|time:"H:i:s" }}</td>
+                <td>{{ record.check_out_time|default:"-"|time:"H:i:s" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">No attendance records found for today.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

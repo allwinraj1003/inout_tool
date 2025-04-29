@@ -1,0 +1,37 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #840ede, #071fa8); 
+    color: #fff;
+    margin: 0;
+    padding-top: 80px;
+  }
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    background: #cab8b8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* added soft shadow */
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #007bff;
+    color: rgb(113, 205, 153);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #0056b3;
+}
